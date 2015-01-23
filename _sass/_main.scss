@@ -14,7 +14,9 @@
 */
 
 body {
-  font-family: "Merriweather", "PT Serif", Georgia, "Times New Roman", serif;
+  font-family: "Avenir Next", "Merriweather", "Helvetica", "PT Serif", Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  background-color: #262625
 }
 
 html, body {
@@ -41,7 +43,7 @@ img {
 }
 
 body {
-  font-size: 1.5rem;
+  font-size: 2.0rem;
 
           box-sizing: border-box;
      -moz-box-sizing: border-box;
@@ -59,12 +61,14 @@ body {
 
 .site-header a {
   color: #333;
-  font-weight: 300;
+  margin-top: 1em;
+  font-weight: 400;
 }
 
 .site-header nav a {
   font-size: 1rem;
   color: #666;
+  display: none;
 }
 
 .site-header nav a:hover {
@@ -177,7 +181,7 @@ table {
 .pagination,
 .button {
   font-size: 1rem;
-  font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+  font-family: 'Avenir Next', 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
   font-weight: 300;
   text-align: center;
 }
@@ -250,9 +254,9 @@ textarea.input {
 }
 
 p {
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.5;
-  color: #333;
+  color: #999;
 }
 
 abbr {
@@ -290,7 +294,7 @@ blockquote {
 blockquote footer {
   font-size: .85rem;
   font-style: normal;
-  background-color: #fff;
+  background-color: inherit;
   color: #7a7a7a;
   border-color: transparent;
 }
@@ -307,9 +311,10 @@ h5,
 .h5,
 h6,
 .h6 {
-  font-family: "Lato", 'Helvetica Neue', Helvetica, sans-serif;
-  font-weight: 900;
+  font-family: "Avenir Next", "Lato", 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: 400;
   line-height: 1.2;
+  color: #eee;
   margin: 1em 0 0.5em;
 }
 
