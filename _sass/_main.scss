@@ -60,7 +60,7 @@ body {
 }
 
 .site-header a {
-  color: #333;
+  color: #666;
   margin-top: 1em;
   font-weight: 400;
 }
@@ -87,10 +87,8 @@ body {
 }
 
 .site-header a:hover,
-.posts .post a:hover .post-meta,
-.posts .post a:hover .post-title,
-.posts .post a:hover .post-summary {
-  opacity: 0.88;
+.posts .post a:hover .post-title {
+  opacity: 0.7;
 }
 
 /*
@@ -161,8 +159,8 @@ table {
 
 .post-link .post-title {
   margin-top: 0;
-  font-weight: 600;
-  color: #333;
+  font-weight: 400;
+  color: #ccc;
 }
 
 .post-footer {
@@ -190,20 +188,19 @@ table {
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
-  background: #fafafa;
+  background: inherit;
   border-radius: 0.1875em;
   border: 1px solid #f3f3f3;
-  color: #333333;
+  color: #bbb;
   padding: 1em 1.5em;
 }
 
 .pagination .disabled {
-  opacity: 0.5;
+  opacity: 0;
 }
 
 .pagination a:hover, .pagination a:focus {
-  background: white;
-  color: #477dca;
+  background: #444;
 }
 
 .pagination a:active {
@@ -222,7 +219,6 @@ table {
   margin: 0;
   padding: .25em 0;
   color: #7a7a7a;
-  font-style: italic;
 }
 
 .pagination .button {
@@ -257,6 +253,20 @@ p {
   font-weight: 400;
   line-height: 1.5;
   color: #999;
+}
+
+strong {
+  font-weight: 600;
+  color: #bbb
+}
+
+li {
+  font-weight: 400;
+  color: #999
+}
+
+::selection {
+  background: #666
 }
 
 abbr {
@@ -390,7 +400,7 @@ h6,
   .posts .post {
     margin-bottom: 1.333em;
     padding-bottom: 0.666em;
-    border-bottom: thin solid #f3f3f3;
+    border-bottom: thin solid #333;
   }
 
   .posts .post:last-child {
@@ -481,7 +491,7 @@ h6,
   .posts .post {
     margin-bottom: 2.666em;
     padding-bottom: 1.333em;
-    border-bottom: thin solid #f3f3f3;
+    border-bottom: thin solid #333;
   }
 
   .posts .post:last-child {
@@ -491,14 +501,10 @@ h6,
   }
 }
 
-footer {
-  border-top: thin solid #f3f3f3;
-}
-
 footer,
 footer .wrap {
   color: #7a7a7a;
-  background-color: #fafafa;
+  background-color: inherit;
   font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
   font-weight: 300;
   clear: both;
@@ -507,6 +513,10 @@ footer .wrap {
 footer:after {
   content: "";
   display: block;
+}
+
+footer a {
+  color: inherit
 }
 
 @charset "UTF-8";

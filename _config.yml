@@ -6,6 +6,7 @@ description: "Rinat Khanov on technology and life."
 baseurl:     ""
 url:         "http://blog.rinatkhanov.me"
 
+
 # Google analytics
 google_analytics:
 
@@ -23,6 +24,7 @@ show_social_icons: false
 github_username:
 stackoverflow_id:
 twitter_username: rinatkhanov
+twitter_url: https://twitter.com/rinatkhanov
 google_plus_id:
 linkedin_username:
 bitcoin_url:
@@ -33,8 +35,8 @@ flattr_button:
 markdown:     redcarpet
 redcarpet:
   extensions: ['smart', 'tables', 'with_toc_data']
-permalink:    pretty
-paginate:     10
+permalink:    /:categories/:title.html
+paginate:     3
 sass:
   compressed: true
 gems:
