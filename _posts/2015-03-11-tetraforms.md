@@ -3,7 +3,7 @@ layout:     post
 title:      Creating a Windows Phone 8 game in 24 hours
 date:       2015-01-28 12:31:19
 categories: retrospective
-summary:    "I’ve been planning to write this article for months, but it’s better late then never. Last November, local [Imagine Cup](http://en.wikipedia.org/wiki/Imagine_Cup) took place here in Kazan and I’d like to share the experience. For those of you who’ve never heard of the event before, it’s a student hackathon organized by Microsoft annually around the world.
+summary:    "I’ve been planning to write this article for months, but it’s better late then never. Last November, local Imagine Cup took place here in Kazan and I’d like to share the experience. For those of you who’ve never heard of the event before, it’s a student hackathon organized by Microsoft annually around the world.
 <br><br>
 As the theme states, participants are expected to “solve tough problems by technology” — on practice, this means building an app or a game for Windows platform in 24-hour format. Obviously, making use of things like Microsoft Azure or Kinect is highly encouraged by the organizers.
 <br><br>
