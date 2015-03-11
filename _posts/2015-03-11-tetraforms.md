@@ -72,7 +72,7 @@ Imagine Cup ended by a series of project presentations by participants. In total
 
 Apparently, when you mirror your Windows Phone screen to your laptop via cable, you only get a fraction of color signal, so we had to replace our beautiful gradients with plain gray background. And like for many other folks, organizers’ VGA adaptor failed when we tried to connect to the big display, so we had to awkwardly show the game on a laptop screen.
 
-Anyway, TetraForms was chosen be the third and we were even awarded Nokia Lumia. Tired and sleep deprived, it still felt really incredible to walk up on the stage.
+Anyway, TetraForms was chosen to be the third and we were even awarded Nokia Lumia. Tired and sleep deprived, it still felt really incredible to walk up on the stage.
 
 We made it. A Widnows Phone 8 game in 24 hours, with zero prior experience developing for the platform. Wow, what an experience.
 
