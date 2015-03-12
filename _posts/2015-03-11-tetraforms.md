@@ -64,7 +64,7 @@ After a long night, hanging out with other folks was a great way to cool down an
 
 As more and more projects got finished to some degree, it was interesting to walk up to random desks to say hi because people were always excited to tell what they were working on last night. Most of the projects were 2D games written with Unity (it seems we were the only ones to use MonoGame).
 
-Sometime around noon, we got hungry and went out to the city to have a quick lunch. On our way to local BK, we shared our thoughts about other projects, guessed our chances of winning and discussed how we should present the game to organizers.
+Sometime around noon, we got hungry and went out to the city to have a quick lunch. On our way to local Burger King, we shared our thoughts about other projects, guessed our chances of winning and discussed how we should present the game to organizers.
 
 ### Win-win
 
