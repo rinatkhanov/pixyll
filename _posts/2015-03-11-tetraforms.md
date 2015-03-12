@@ -28,7 +28,7 @@ The idea is simple enough to describe in a paragraph — there are squares and c
 
 ### Getting Started
 
-Two of us rely on MacBooks on a daily basis and we had just one testing device (Nokia Lumia) in a team, so running Windows Phone simulator inside Windows virtual machine via Parallels seemed like the most pragmatic solution to us. It went generally okay, though sometime around midnight during the hackathon my WP emulator suddenly stopped working. (I didn’t have much time to dig into the problem, so it made testing a little bit harder).
+Two of us rely on MacBooks on a daily basis and we had just one testing device (Nokia Lumia) in the team, so running Windows Phone simulator inside Windows virtual machine via Parallels seemed like the most pragmatic solution to us. It went generally okay, though sometime around midnight during the hackathon my WP emulator suddenly stopped working. (I didn’t have much time to dig into the problem, so it made testing a little bit harder).
 
 We also had to decide which game engine to use — either [MonoGame](https://github.com/mono/MonoGame) or [Unity](http://unity3d.com). Having absolutely zero clue and no time to do a proper research, we just picked MonoGame judging by download size (something like ~100mb vs ~2gb). Looking back, I wish someone had told us to think more carefully when making this choice.
 
