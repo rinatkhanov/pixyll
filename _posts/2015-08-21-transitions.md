@@ -22,16 +22,16 @@ I was aware of new view controller transitioning API introduced back in iOS 7 bu
 
 The first thing we need to do is create a delegate for our navigation controller. Let's make a new class conforming to `UINavigationControllerDelegate` protocol and implement one of the (optional) methods related to transition animations:
 
-```
+```swift
 class NavDelegate: NSObject, UINavigationControllerDelegate {
-private let animator = Animator()
+	private let animator = Animator()
 
-func navigationController(navigationController: UINavigationController, 
-animationControllerForOperation operation: UINavigationControllerOperation, 
-fromViewController fromVC: UIViewController, 
-toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-return animator
-}
+	func navigationController(navigationController: UINavigationController, 
+         animationControllerForOperation operation: UINavigationControllerOperation, 
+                         fromViewController fromVC: UIViewController, 
+                             toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return animator
+    }
 }
 ```
 
@@ -43,19 +43,19 @@ There are different ways to set an instance of this class as a delegate for our 
 
 You probably noticed `Animator` class in there, which as the name suggests handles all the animations. You could essentially have animation code in `NavDelegate` class itself and just return `self` in that method above, but I like to keep things separate (even though I define `Animator` in the same `.swift` file).
 
-```
+```swift
 class Animator: NSObject, UIViewControllerAnimatedTransitioning {
-func transitionDuration(context: UIViewControllerContextTransitioning) -> NSTimeInterval {
-return 0.4
-}
-
-func animateTransition(context: UIViewControllerContextTransitioning) {
-let toVC = context.viewControllerForKey(viewControllerForKey:UITransitionContextToViewControllerKey)
-let fromVC = context.viewControllerForKey(viewControllerForKey:UITransitionContextFromViewControllerKey)
-context.containerView().addSubview(toVC.view)
-// animate your views here, then call this method when your animation is completed:
-context.completeTransition(!context.transitionWasCancelled())
-}
+    func transitionDuration(context: UIViewControllerContextTransitioning) -> NSTimeInterval {
+        return 0.4
+    }
+    
+    func animateTransition(context: UIViewControllerContextTransitioning) {
+        let toVC = context.viewControllerForKey(viewControllerForKey:UITransitionContextToViewControllerKey)
+        let fromVC = context.viewControllerForKey(viewControllerForKey:UITransitionContextFromViewControllerKey)
+        context.containerView().addSubview(toVC.view)
+        // animate your views here, then call this method when your animation is completed:
+        context.completeTransition(!context.transitionWasCancelled())
+    }
 }
 ```
 
@@ -71,19 +71,19 @@ Your animation may be as simple as plain cross-dissolve or scale transform, but 
 
 So, let's imagine we have a table view in one view controller (`CategoryVC`) with cell backgrounds acting as a hero image in another view controller (`PostListVC`) and we want to smoothly animate the transitioning between these two screens. Because `Animator` handles both push and pop transition in my case, let's change our implementation of `animateTransition` method to reflect that:
 
-```
+```swift
 func animateTransition(context: UIViewControllerContextTransitioning) {
-// push
-if let categoryVC = context.viewControllerForKey(UITransitionContextFromViewControllerKey) as? CategoryVC,
-postListVC = context.viewControllerForKey(UITransitionContextToViewControllerKey) as? PostListVC {
-moveFromCategories(categoryVC, toPosts:postListVC, withContext: context)
-}
-
-// pop
-else if let categoryVC = context.viewControllerForKey(UITransitionContextToViewControllerKey) as? CategoryVC,
-postListVC = context.viewControllerForKey(UITransitionContextFromViewControllerKey) as? PostListVC {
-moveFromPosts(postListVC, toCategories: categoryVC, withContext: context)
-}
+    // push
+    if let categoryVC = context.viewControllerForKey(UITransitionContextFromViewControllerKey) as? CategoryVC,
+        postListVC = context.viewControllerForKey(UITransitionContextToViewControllerKey) as? PostListVC {
+            moveFromCategories(categoryVC, toPosts:postListVC, withContext: context)
+    }
+        
+    // pop
+    else if let categoryVC = context.viewControllerForKey(UITransitionContextToViewControllerKey) as? CategoryVC,
+        postListVC = context.viewControllerForKey(UITransitionContextFromViewControllerKey) as? PostListVC {
+            moveFromPosts(postListVC, toCategories: categoryVC, withContext: context)
+    }
 }
 ```
 
@@ -93,81 +93,81 @@ Cool, now we have two separate methods to handle push and pop transitions betwee
 
 As you can see, there's a lot happening during animation. Let's break it down into parts, focusing just on push transition for now:
 
-```
+```swift
 private var selectedCellFrame: CGRect? = nil
 private var originalTableViewY: CGFloat? = nil
 
 private func moveFromCategories(categoryVC: CategoryVC, toPosts postListVC: PostListVC, withContext context: UIViewControllerContextTransitioning) {
+            
+    if let indexPath = categoryVC.tableView.indexPathForSelectedRow(),
+        selectedCell = categoryVC.tableView.cellForRowAtIndexPath(indexPath) as? FolderCell {
+        
+            context.containerView().addSubview(postListVC.view)
+            
+            // cell background -> hero image view transition
+            // (don't want to mess with actual views,
+            // so creating a new image view just for transition)
+            let imageView = createTransitionImageViewWithFrame(selectedCell.frame)
+            imageView.image = selectedCell.background.image
+            imageView.alpha = 0.0 // hidden initially
+            postListVC.view.addSubview(imageView)
 
-if let indexPath = categoryVC.tableView.indexPathForSelectedRow(),
-selectedCell = categoryVC.tableView.cellForRowAtIndexPath(indexPath) as? FolderCell {
+            // save table view's original position and selected cell frame
+            // (as a property) to move them back during pop transition animation
+            selectedCellFrame = selectedCell.frame
+            originalTableViewY = categoryVC.tableView.frame.origin.y
 
-context.containerView().addSubview(postListVC.view)
+            // figure out by how much need to move content
+            let heroFinalHeight = PostListVC.HeroViewHeight.Regular.rawValue
+            let deltaY = selectedCell.center.y - heroFinalHeight / 2.0
 
-// cell background -> hero image view transition
-// (don't want to mess with actual views,
-// so creating a new image view just for transition)
-let imageView = createTransitionImageViewWithFrame(selectedCell.frame)
-imageView.image = selectedCell.background.image
-imageView.alpha = 0.0 // hidden initially
-postListVC.view.addSubview(imageView)
+            // adjust text labels inside hero view (so they appear as if they came from selected cell)
+            let originalCategoryDescriptionBottomSpacerConstant = postListVC.categoryDescriptionBottomSpacer.constant
+            postListVC.categoryDescriptionBottomSpacer.constant -= deltaY / 2.0
 
-// save table view's original position and selected cell frame
-// (as a property) to move them back during pop transition animation
-selectedCellFrame = selectedCell.frame
-originalTableViewY = categoryVC.tableView.frame.origin.y
+            postListVC.hideElementsForPushTransition() // (more about that later)
+            
+            UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.75, initialSpringVelocity: 1.0, options: .CurveEaseInOut, animations: {
 
-// figure out by how much need to move content
-let heroFinalHeight = PostListVC.HeroViewHeight.Regular.rawValue
-let deltaY = selectedCell.center.y - heroFinalHeight / 2.0
+            	// hide "your future pack" label
+                categoryVC.titleLabel.alpha = 0.0
 
-// adjust text labels inside hero view (so they appear as if they came from selected cell)
-let originalCategoryDescriptionBottomSpacerConstant = postListVC.categoryDescriptionBottomSpacer.constant
-postListVC.categoryDescriptionBottomSpacer.constant -= deltaY / 2.0
+                // adjust table view frame so it appears like whole content is moving with cell image
+                categoryVC.tableView.frame.origin.y -= deltaY
 
-postListVC.hideElementsForPushTransition() // (more about that later)
+                // move our transitioning imageView towards hero image position (and grow its size at the same time)
+                imageView.frame = CGRect(x: 0.0, y: 0.0, width: imageView.frame.width, height: heroFinalHeight)
+                imageView.alpha = 1.0
 
-UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.75, initialSpringVelocity: 1.0, options: .CurveEaseInOut, animations: {
+                postListVC.view.alpha = 1.0
+                
+                }) { finished in
+                    
+                    // now we are ready to show real heroView on top of our imageView
+                    postListVC.view.sendSubviewToBack(imageView)
 
-// hide "your future pack" label
-categoryVC.titleLabel.alpha = 0.0
-
-// adjust table view frame so it appears like whole content is moving with cell image
-categoryVC.tableView.frame.origin.y -= deltaY
-
-// move our transitioning imageView towards hero image position (and grow its size at the same time)
-imageView.frame = CGRect(x: 0.0, y: 0.0, width: imageView.frame.width, height: heroFinalHeight)
-imageView.alpha = 1.0
-
-postListVC.view.alpha = 1.0
-
-}) { finished in
-
-// now we are ready to show real heroView on top of our imageView
-postListVC.view.sendSubviewToBack(imageView)
-
-postListVC.categoryDescriptionBottomSpacer.constant = originalCategoryDescriptionBottomSpacerConstant
-postListVC.prepareToCompletePushTransition() // (more about that later)
-
-// prepare constraints for animation
-let autoLayoutViews = [postListVC.backButton, postListVC.categoryDescription, postListVC.categoryTitle]
-for view in autoLayoutViews { view.setNeedsUpdateConstraints() }
-
-UIView.animateWithDuration(0.3, animations: {
-postListVC.heroView.alpha = 1.0
-for view in autoLayoutViews { view.layoutIfNeeded() }
-
-}) { finishedInner in
-
-// clean up & revert all the temporary things
-imageView.removeFromSuperview()
-categoryVC.titleLabel.alpha = 1.0
-categoryVC.tableView.deselectRowAtIndexPath(indexPath, animated: false)
-
-context.completeTransition(!context.transitionWasCancelled())
-}
-}
-}
+                    postListVC.categoryDescriptionBottomSpacer.constant = originalCategoryDescriptionBottomSpacerConstant
+                    postListVC.prepareToCompletePushTransition() // (more about that later)
+                    
+                    // prepare constraints for animation
+                    let autoLayoutViews = [postListVC.backButton, postListVC.categoryDescription, postListVC.categoryTitle]
+                    for view in autoLayoutViews { view.setNeedsUpdateConstraints() }
+                    
+                    UIView.animateWithDuration(0.3, animations: {
+                        postListVC.heroView.alpha = 1.0
+                        for view in autoLayoutViews { view.layoutIfNeeded() }
+                        
+                        }) { finishedInner in
+                            
+                            // clean up & revert all the temporary things
+                            imageView.removeFromSuperview()
+                            categoryVC.titleLabel.alpha = 1.0
+                            categoryVC.tableView.deselectRowAtIndexPath(indexPath, animated: false)
+                            
+                            context.completeTransition(!context.transitionWasCancelled())
+                    }
+            }
+    }
 }
 ```
 
@@ -179,53 +179,53 @@ Also, you may need to take into account `tableView.contentInset.top` property wh
 
 There are a few helpers I omitted from code snippet above. For the sake of completion, let's take a look at them too:
 
-```
+```swift
 private func createTransitionImageViewWithFrame(frame: CGRect) -> UIImageView {
-let imageView = UIImageView(frame: frame)
-imageView.contentMode = .ScaleAspectFill
-imageView.setupDefaultTopInnerShadow()
-imageView.clipsToBounds = true
-return imageView
+    let imageView = UIImageView(frame: frame)
+    imageView.contentMode = .ScaleAspectFill
+    imageView.setupDefaultTopInnerShadow()
+    imageView.clipsToBounds = true
+    return imageView
 }
 ```
 
 Nothing particularly exciting here, just a plain `UIImageView` which is used for cell / hero view transition.
 
-```
+```swift
 private extension PostListVC {
-func hideElementsForPushTransition() {
-// hero view appears with slight delay (not in sync)
-// so need to hide it explicitly from container view
-view.alpha = 0.0
-heroView.alpha = 0.0
-
-// hide all visible cells
-for cell in visibleCellViews { cell.alpha = 0.0 }
-
-// move back button arrow beyond screen
-backButtonHorizontalSpacer.constant = -70.0
-}
-
-func prepareToCompletePushTransition() {
-backButtonHorizontalSpacer.constant = 0.0
-disableTransparencyAnimatedForViews(visibleCellViews)
-}
-
-private var visibleCellViews: [UIView] {
-return (tableView.visibleCells() as! [UITableViewCell]).map { $0.contentView }
-}
+    func hideElementsForPushTransition() {
+        // hero view appears with slight delay (not in sync)
+        // so need to hide it explicitly from container view
+        view.alpha = 0.0
+        heroView.alpha = 0.0
+        
+        // hide all visible cells
+        for cell in visibleCellViews { cell.alpha = 0.0 }
+        
+        // move back button arrow beyond screen
+        backButtonHorizontalSpacer.constant = -70.0
+    }
+    
+    func prepareToCompletePushTransition() {
+        backButtonHorizontalSpacer.constant = 0.0
+        disableTransparencyAnimatedForViews(visibleCellViews)
+    }
+    
+    private var visibleCellViews: [UIView] {
+        return (tableView.visibleCells() as! [UITableViewCell]).map { $0.contentView }
+    }
 }
 ```
 
 Interesting part is `disableTransparencyAnimatedForViews` call which allows us to show cells one by one. It is implemented as a simple recursive function:
 
-```
+```swift
 func disableTransparencyAnimatedForViews(views: [UIView]) {
-if let view = views.first {
-UIView.animateWithDuration(0.2, animations: { view.alpha = 1.0 }) { _ in
-disableTransparencyAnimatedForViews(Array(views[1..<views.count]))
-}
-}
+    if let view = views.first {
+        UIView.animateWithDuration(0.2, animations: { view.alpha = 1.0 }) { _ in
+            disableTransparencyAnimatedForViews(Array(views[1..<views.count]))
+        }
+    }
 }
 ```
 
@@ -233,28 +233,28 @@ You could achieve the same effect by overlaying semitransparent view on top of t
 
 Let's take a look at pop transition animation:
 
-```
+```swift
 private func moveFromPosts(postListVC: PostListVC, toCategories categoryVC: CategoryVC, withContext context: UIViewControllerContextTransitioning) {
 
-context.containerView().addSubview(categoryVC.view)
-categoryVC.view.alpha = 0.0
-
-let imageView = createTransitionImageViewWithFrame(postListVC.heroView.frame)
-imageView.image = postListVC.categoryHeroImage.image
-context.containerView().addSubview(imageView)
-
-UIView.animateWithDuration(0.4, animations: {
-postListVC.view.alpha = 0.0
-postListVC.view.transform = CGAffineTransformMakeScale(0.9, 0.9)
-categoryVC.view.alpha = 1.0
-categoryVC.tableView.frame.origin.y = self.originalTableViewY ?? categoryVC.tableView.frame.origin.y
-imageView.alpha = 0.0
-imageView.frame = self.selectedCellFrame ?? imageView.frame
-}) { finished in
-postListVC.view.transform = CGAffineTransformIdentity
-imageView.removeFromSuperview()
-context.completeTransition(!context.transitionWasCancelled())
-}
+    context.containerView().addSubview(categoryVC.view)
+    categoryVC.view.alpha = 0.0
+    
+    let imageView = createTransitionImageViewWithFrame(postListVC.heroView.frame)
+    imageView.image = postListVC.categoryHeroImage.image
+    context.containerView().addSubview(imageView)
+    
+    UIView.animateWithDuration(0.4, animations: {
+        postListVC.view.alpha = 0.0
+        postListVC.view.transform = CGAffineTransformMakeScale(0.9, 0.9)
+        categoryVC.view.alpha = 1.0
+        categoryVC.tableView.frame.origin.y = self.originalTableViewY ?? categoryVC.tableView.frame.origin.y
+        imageView.alpha = 0.0
+        imageView.frame = self.selectedCellFrame ?? imageView.frame
+    }) { finished in
+        postListVC.view.transform = CGAffineTransformIdentity
+        imageView.removeFromSuperview()
+        context.completeTransition(!context.transitionWasCancelled())
+    }
 }
 ```
 
