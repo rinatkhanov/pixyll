@@ -16,7 +16,7 @@ I am a big fan of animation libraries such as Facebook's [pop](https://github.co
 
 I was aware of new view controller transitioning API introduced back in iOS 7 but until very recently, I never got around to actually take a look at it. Apparently, it is much easier than I imagined! In this article, I am going to make a simple introduction to custom `UINavigationController` transitions for those of us who are still not familiar with this API.
 
-![transition-animation](https://cloud.githubusercontent.com/assets/4293969/9360515/8b3b49c0-468e-11e5-8af6-aa358f7b05a7.gif)
+<img src="{{ site.media_url }}/transitions/regular.gif" style="width: 250px; "/>
 
 #### Basics
 
@@ -39,7 +39,7 @@ If you want to have custom animation only for push or pop transition, you can re
 
 There are different ways to set an instance of this class as a delegate for our `UINavigationController`, but I recently learned an Interface Builder trick which allows us to accomplish this without writing any code:
 
-![delegate-storyboard](https://cloud.githubusercontent.com/assets/4293969/9360551/bd48283e-468e-11e5-807a-21dc3ab4d7cd.png)
+<img src="{{ site.media_url }}/transitions/delegate.png" style="width: 500px; "/>
 
 You probably noticed `Animator` class in there, which as the name suggests handles all the animations. You could essentially have animation code in `NavDelegate` class itself and just return `self` in that method above, but I like to keep things separate (even though I define `Animator` in the same `.swift` file).
 
@@ -89,7 +89,7 @@ func animateTransition(context: UIViewControllerContextTransitioning) {
 
 Cool, now we have two separate methods to handle push and pop transitions between our screens. Let's take a look at our animation once again, this time in slow motion: (you can enable it by selecting Debug -> Slow Animations in the simulator or hitting ⌘T)
 
-[slowmo-transition]
+<img src="{{ site.media_url }}/transitions/slowmo.gif" style="width: 250px; "/>
 
 As you can see, there's a lot happening during animation. Let's break it down into parts, focusing just on push transition for now:
 
