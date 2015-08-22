@@ -265,5 +265,3 @@ Notice how you can scale your views during transition by setting `transform` pro
 As you can see, it's quite a lot of code, but most of it is preparing and setting up views for transition, and it really depends on how advanced animation is that you want to create. 
 
 I also want to note that it is possible to make custom navigation controller transitions interactive – similar to how swipe-to-go-back gesture works on iOS. This feature is out of scope for this post, but you may want to read [Chris Eidhof's article](http://www.objc.io/issues/5-ios7/view-controller-transitions/) for more information about that.
-
-Thanks [Sal](https://twitter.com/khanov) and [Radek](https://twitter.com/radexp/) for reading drafts of this post.
