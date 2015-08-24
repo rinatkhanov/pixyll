@@ -3,14 +3,14 @@ layout:     post
 title:      Custom UINavigationController transition animations with Swift
 date:       2015-08-21 13:21:19
 categories: ios
-summary:    "In the world of flat design, animations play quite an important role – when done right, they guide users throughout the app, making it more delightful and enjoyable experience. Your app may function good enough with built-in system transitions, but custom animations often make a huge difference in overall feeling, making your work stand out as a piece of fine craftsmanship.
+summary:    "In the world of flat design, animations play quite an important role – when done right, they guide users throughout the app, making it more delightful and enjoyable experience. Your app may function well enough with built-in system transitions, but custom animations often make a huge difference in overall feeling, making your work stand out as a piece of fine craftsmanship.
 <br><br>
 I am a big fan of animation libraries such as Facebook's pop and Spring because they do all the hard work under the hood making it super easy to create awesome animations in just a few lines of code. However, I've always had this impression that it is quite difficult to implement transitions from one screen to another in UINavigationController stack – I could animate stuff in viewDidAppear & viewWillDisappear occasionally, but it's icky and adds a lot of boilerplate code to view controllers. So most of the time I just sticked to built-in slide-from-right animation we're so familiar with.
 <br><br>
 I was aware of new view controller transitioning API introduced back in iOS 7 but until very recently, I never got around to actually take a look at it. Apparently, it is much easier than I imagined! In this article, I am going to make a simple introduction to custom UINavigationController transitions for those of us who are still not familiar with this API."
 ---
 
-In the world of flat design, animations play quite an important role – when done right, they guide users throughout the app, making it more delightful and enjoyable experience. Your app may function good enough with built-in system transitions, but custom animations often make a huge difference in overall feeling, making your work stand out as a piece of fine craftsmanship. 
+In the world of flat design, animations play quite an important role – when done right, they guide users throughout the app, making it more delightful and enjoyable experience. Your app may function well enough with built-in system transitions, but custom animations often make a huge difference in overall feeling, making your work stand out as a piece of fine craftsmanship. 
 
 I am a big fan of animation libraries such as Facebook's [pop](https://github.com/facebook/pop) and [Spring](https://github.com/MengTo/Spring) because they do all the hard work under the hood making it super easy to create awesome animations in just a few lines of code. However, I've always had this impression that it is quite difficult to implement transitions from one screen to another in `UINavigationController` stack – I could animate stuff in `viewDidAppear` & `viewWillDisappear` occasionally, but it's icky and adds a lot of boilerplate code to view controllers. So most of the time I just sticked to built-in slide-from-right animation we're so familiar with.
 
@@ -65,7 +65,7 @@ And that's it, really! You can get your view controllers from context object whi
 
 (A little side note: if you're wondering why both `NavDelegate` and `Animator` inherit from `NSObject`, it's because their protocols `UINavigationControllerDelegate` and `UIViewControllerAnimatedTransitioning` inherit from `NSObjectProtocol`).
 
-Your animation may be as simple as plain cross-dissolve or scale transform, but it could also be anything arbitrary complex. I am going to spend the rest of this post explaining how to achieve animation showed on GIF above, but the general approach of implementing custom navigation controller transition animations with Swift should be pretty clear now.
+Your animation may be as simple as plain cross-dissolve or scale transform, but it could also be anything arbitrarily complex. I am going to spend the rest of this post explaining how to achieve animation showed on GIF above, but the general approach of implementing custom navigation controller transition animations with Swift should be pretty clear now.
 
 #### Custom transition example
 
@@ -177,7 +177,7 @@ I want to point out that if you want to change layout of views with Auto Layout 
 
 Also, you may need to take into account `tableView.contentInset.top` property when getting selected cell's frame. 
 
-There are a few helpers I omitted from code snippet above. For the sake of completion, let's take a look at them too:
+There are a few helpers I omitted from code snippet above. For the sake of completeness, let's take a look at them too:
 
 ```swift
 private func createTransitionImageViewWithFrame(frame: CGRect) -> UIImageView {
@@ -262,6 +262,6 @@ Basically, it's the same thing as push transition, just in reverse order and muc
 
 Notice how you can scale your views during transition by setting `transform` property (don't forget to reset it to `CGAffineTransformIdentity` in completion).
 
-As you can see, it's quite a lot of code, but most of it is preparing and setting up views for transition, and it really depends on how advanced animation is that you want to create. 
+As you can see, it's quite a lot of code, but most of it is preparing and setting up views for transition, and it really depends on how advanced animation you want to create. 
 
 I also want to note that it is possible to make custom navigation controller transitions interactive – similar to how swipe-to-go-back gesture works on iOS. This feature is out of scope for this post, but you may want to read [Chris Eidhof's article](http://www.objc.io/issues/5-ios7/view-controller-transitions/) for more information about that.
